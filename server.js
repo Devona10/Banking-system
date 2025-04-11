@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// ✅ PostgreSQL pool using environment variables
+// ✅ PostgreSQL connection using environment variables
 const pool = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
@@ -28,7 +28,6 @@ const pool = new Pool({
 });
 
 // ----------------- Doubly Linked List -------------------
-
 class TransactionNode {
   constructor(id, amount, type, status, created_at) {
     this.id = id;
