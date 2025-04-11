@@ -2,23 +2,32 @@ const express = require('express');
 const { Pool } = require('pg');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
 
-// PostgreSQL pool
-const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'banking_node',
-  password: 'derickdevo',
-  port: 5432,
+// ✅ Serve static files (HTML, CSS, JS) from root directory
+app.use(express.static(path.join(__dirname)));
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// ----------------- Linked List Implementation -------------------
+// ✅ PostgreSQL pool for Render DB (you can replace with env variables later)
+const pool = new Pool({
+  user: 'banking_db_egk5_user',
+  host: 'dpg-cvsn7qi4d50c73e78610-a',
+  database: 'banking_db_egk5',
+  password: 'UNOep02xV7uwcL3U9zBbPxHVZYJuWMPF',
+  port: 5432,
+  ssl: { rejectUnauthorized: false }
+});
+
+// ----------------- Doubly Linked List -------------------
 
 class TransactionNode {
   constructor(id, amount, type, status, created_at) {
@@ -55,13 +64,11 @@ class TransactionList {
     while (this.current && this.current.status !== 'active') {
       this.current = this.current.prev;
     }
-
     if (this.current) {
       const txn = this.current;
       this.current = this.current.prev;
       return txn;
     }
-
     return null;
   }
 
@@ -88,7 +95,7 @@ class TransactionList {
   }
 }
 
-const userSessions = {}; // Store transaction list per user session
+const userSessions = {};
 
 async function getUserData(userId, username) {
   const txns = await pool.query(
@@ -98,7 +105,6 @@ async function getUserData(userId, username) {
 
   const transactions = txns.rows;
 
-  // Init or reset session
   if (!userSessions[username]) {
     userSessions[username] = new TransactionList();
   } else {
@@ -112,7 +118,6 @@ async function getUserData(userId, username) {
       if (txn.type === 'deposit') balance += Number(txn.amount);
       else if (txn.type === 'withdraw') balance -= Number(txn.amount);
     }
-
     userSessions[username].insert(txn);
   });
 
@@ -120,10 +125,6 @@ async function getUserData(userId, username) {
 }
 
 // ----------------- Routes -------------------
-
-app.get('/', (req, res) => {
-  res.send('✅ Banking backend with doubly linked list is running!');
-});
 
 app.post('/register', async (req, res) => {
   const { username, password } = req.body;
@@ -167,7 +168,6 @@ app.post('/transaction', async (req, res) => {
 
     const userId = userResult.rows[0].id;
 
-    // Get current balance before inserting withdrawal
     const { balance } = await getUserData(userId, username);
 
     if (type === 'withdraw' && Number(amount) > balance) {
