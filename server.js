@@ -17,13 +17,13 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// ✅ PostgreSQL pool for Render DB (you can replace with env variables later)
+// ✅ PostgreSQL pool using environment variables
 const pool = new Pool({
-  user: 'banking_db_egk5_user',
-  host: 'dpg-cvsn7qi4d50c73e78610-a',
-  database: 'banking_db_egk5',
-  password: 'UNOep02xV7uwcL3U9zBbPxHVZYJuWMPF',
-  port: 5432,
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT || 5432,
   ssl: { rejectUnauthorized: false }
 });
 
