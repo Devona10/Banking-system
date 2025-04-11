@@ -19,7 +19,7 @@ async function signup() {
   const username = document.getElementById("signup-username").value;
   const password = document.getElementById("signup-password").value;
 
-  const res = await fetch("http://localhost:3000/register", {
+  const res = await fetch("https://banking-system-omp7.onrender.com/register", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password }),
@@ -38,7 +38,7 @@ async function login() {
   const username = document.getElementById("login-username").value;
   const password = document.getElementById("login-password").value;
 
-  const res = await fetch("http://localhost:3000/login", {
+  const res = await fetch("https://banking-system-omp7.onrender.com/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password }),
@@ -66,7 +66,7 @@ function logout() {
 // ✅ Fetch Transactions
 async function fetchTransactions() {
   if (!currentUser) return;
-  const res = await fetch(`http://localhost:3000/transactions/${currentUser}`);
+  const res = await fetch(`https://banking-system-omp7.onrender.com/transactions/${currentUser}`);
   const data = await res.json();
   if (data.error) {
     alert(data.error);
@@ -85,7 +85,7 @@ async function addTransaction() {
     return;
   }
 
-  const res = await fetch("http://localhost:3000/transaction", {
+  const res = await fetch("https://banking-system-omp7.onrender.com/transaction", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username: currentUser, amount, type }),
@@ -102,7 +102,7 @@ async function addTransaction() {
 
 // ✅ Undo Transaction
 async function undoTransaction() {
-  const res = await fetch(`http://localhost:3000/undo/${currentUser}`, {
+  const res = await fetch(`https://banking-system-omp7.onrender.com/undo/${currentUser}`, {
     method: "POST",
   });
 
@@ -116,7 +116,7 @@ async function undoTransaction() {
 
 // ✅ Redo Transaction
 async function redoTransaction() {
-  const res = await fetch(`http://localhost:3000/redo/${currentUser}`, {
+  const res = await fetch(`https://banking-system-omp7.onrender.com/redo/${currentUser}`, {
     method: "POST",
   });
 
