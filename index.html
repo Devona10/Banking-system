@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Banking System</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="container">
+        <h1>Banking System</h1>
+
+        <!-- Auth Section -->
+        <div id="auth-section">
+            <div class="auth-group">
+                <h2>Login</h2>
+                <input type="text" id="login-username" placeholder="Username">
+                <input type="password" id="login-password" placeholder="Password">
+                <button onclick="login()">Login</button>
+            </div>
+
+            <div class="auth-group">
+                <h2>Sign Up</h2>
+                <input type="text" id="signup-username" placeholder="New Username">
+                <input type="password" id="signup-password" placeholder="New Password">
+                <button onclick="signup()">Sign Up</button>
+            </div>
+        </div>
+
+        <!-- Logged-in Section -->
+        <div id="banking-section" style="display:none;">
+            <h2 id="welcome-msg">Welcome!</h2>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+
+            <h2 id="balance">Balance: ₹0</h2>
+
+            <div class="transaction-form">
+                <label for="amount">Amount:</label>
+                <input type="number" id="amount" placeholder="Enter amount">
+
+                <label for="type">Transaction Type:</label>
+                <select id="type">
+                    <option value="deposit">Deposit</option>
+                    <option value="withdraw">Withdraw</option>
+                </select>
+
+                <button onclick="addTransaction()">Add Transaction</button>
+            </div>
+
+            <div class="transaction-buttons">
+                <button onclick="undoTransaction()">Undo</button>
+                <button onclick="redoTransaction()">Redo</button>
+                <button onclick="fetchTransactions()">Refresh</button>
+            </div>
+
+            <h2>Transaction History</h2>
+            <div id="transaction-history"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
